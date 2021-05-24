@@ -5,7 +5,8 @@
 }
 
 body {
-    background-color: whitesmoke;
+    background-color: rgb(238, 237, 226);
+    background-image: linear-gradient(to left, rgb(247, 239, 195), rgb(240, 227, 158), rgb(235, 229, 177));
 }
 
 header {
@@ -48,8 +49,10 @@ header h1 {
     width: 800px;
     height: 280px;
     padding: 20px;
-    border: 1px solid;
+    border: 2px solid;
+    border-radius: 5px;
     margin: 40px;
+    background-image: linear-gradient(to left, rgb(56, 46, 241), rgb(85, 85, 241), rgb(141, 169, 245));
 }
 
 #City,
@@ -74,10 +77,10 @@ header h1 {
     width: 150px;
     height: 200px;
     margin: 10px;
-    border: 3px solid;
-    border-radius: 1px;
+    border: 2px solid;
+    border-radius: 5px;
     box-shadow: 1px 1px 1px rgb(220, 207, 20);
-    background-color: cornflowerblue;
+    background-image: linear-gradient(to left, rgb(104, 96, 250), rgb(123, 123, 241), rgb(141, 169, 245));
 }
 
 [class*="future-day-"] span {
@@ -90,13 +93,17 @@ header h1 {
 #Wind,
 #Humidity {
     font-size: 14px;
-    margin: 5px;
+    margin: 6px;
 }
 
 .leftside {
     margin: 40px;
     font-family: 'Arial';
 }
+
+
+
+
 
 #input-city {
     width: 250px;
@@ -113,15 +120,19 @@ header h1 {
     height: 35px;
     padding: 10px;
     margin: 10px;
+    border: 2px solid;
+    border-color: black;
     border-radius: 5px;
     background-color: rgb(82, 140, 228);
+    color: white;
+    font-weight: bold;
 }
 
 .divider {
     width: 250px;
     height: 1px;
-    padding: 0.5px;
-    margin: 10px;
+    padding: 0.8px;
+    margin: 11px;
     background-color: black;
 }
 
@@ -145,6 +156,10 @@ header h1 {
     font-size: 18px;
     display: inline-block;
 }
+
+
+
+
 
 footer {
     padding: 90px;

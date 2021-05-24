@@ -1,7 +1,11 @@
+//Using the id from index.html to make the function run
+
 const weatherApiEndpoint = "https://api.openweathermap.org/data/2.5/weather";
 const oneCallApiEndpoint = "https://api.openweathermap.org/data/2.5/onecall";
 const apiKey = "ab26bf8f174c0370cd63b63281374b74";
 const historicalCitiesArrayKey = "historicalCities";
+
+
 
 let inputBox = document.getElementById('input-city');
 inputBox.addEventListener("keyup", e => {
@@ -19,9 +23,9 @@ searchButton.addEventListener('click', () => {
     renderHistoricalCities(JSON.parse(localStorage.getItem(historicalCitiesArrayKey) || '[]'));
 });
 
-
-
-
+/* When we write down a new city "which include its ARRAY" needs to appear in the history and to be 
+in the local storage, if the city already exists then nothing 
+is going to happen */
 
 function setNewCityToLocalstorage(city) {
     let store = JSON.parse(localStorage.getItem(historicalCitiesArrayKey) || '[]');
@@ -32,11 +36,12 @@ function setNewCityToLocalstorage(city) {
     localStorage.setItem(historicalCitiesArrayKey, JSON.stringify(store));
 }
 
+/* The city write down will appear like a first value [0] */
 function renderHistoricalCities(historyCities) {
     let historyCitiesBox = document.getElementsByClassName("search-history")[0];
 
     historyCities.forEach(city => {
-        let cityButtonClass = `city-button-${city.replace(/\s/g , "-")}`;
+        let cityButtonClass = `city-button-${city.replace(/\s/g , "-")}`; //This code allows city with many names
         let isCityButtonNotExists = document.getElementsByClassName(cityButtonClass).length === 0;
 
         if (isCityButtonNotExists) {
@@ -52,6 +57,9 @@ function renderHistoricalCities(historyCities) {
     });
 }
 
+
+
+
 async function renderWeatherReportByCity(city) {
     let lon, lat;
     const url = `${weatherApiEndpoint}?q=${city}&units=metric&appid=${apiKey}`;
@@ -62,6 +70,15 @@ async function renderWeatherReportByCity(city) {
     let Wind = document.getElementById("Wind");
     let Humidity = document.getElementById("Humidity");
     let UVIndex = document.getElementById("UV-Index");
+
+
+
+/*To get the fetch response I use the JSON, however the Json is a string and we can not use the string. 
+To avoid string and get objet I need to serialized, this is why I'm using deserializedJson. 
+
+My API give me the date in timestamp so I use a formula*1000 to get a current date
+in the format dd/mm/yyyy */
+
 
     await fetch(url)
         .then(response => response.json())
@@ -81,6 +98,10 @@ async function renderWeatherReportByCity(city) {
     const forecastUrl = `${oneCallApiEndpoint}?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=metric&appid=${apiKey}`;
     const forecastSection = document.getElementsByClassName("forecast")[0];
 
+
+/* We deserializad to convert from string to object  */
+
+
     await fetch(forecastUrl)
         .then(response => response.json())
         .then(deserializedJson => {
@@ -90,6 +111,9 @@ async function renderWeatherReportByCity(city) {
                 let isFutureDaySectionExists = document.getElementsByClassName(futureDayClassname).length !== 0;
                 let dateElement, iconElement, temperatureElement, windElement, humidityElement, futureDaySection;
 
+/* Typing a city it was showing twice the futuredaysection, so this function replace the original instead to reshow it
+if the function does not exist then the elements need to show up. However if the function exists does not need to show up again 
+but refresh the value */
                 if (!isFutureDaySectionExists) {
                     futureDaySection = document.createElement("div");
                     futureDaySection.setAttribute("class", futureDayClassname);
