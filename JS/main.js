@@ -39,7 +39,6 @@ function renderHistoricalCities(historyCities) {
         let cityButtonClass = `city-button-${city.replace(/\s/g , "-")}`;
         let isCityButtonNotExists = document.getElementsByClassName(cityButtonClass).length === 0;
 
-        console.log(isCityButtonNotExists);
         if (isCityButtonNotExists) {
             let cityButton = document.createElement("button");
             cityButton.setAttribute("class", cityButtonClass);
