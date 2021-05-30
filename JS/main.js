@@ -7,6 +7,12 @@ const historicalCitiesArrayKey = "historicalCities";
 
 
 
+
+/* keyup is the event which on click up hitting the button search the app needs to run  */
+
+renderWeatherReportByCity('Kansas');
+
+
 let inputBox = document.getElementById('input-city');
 inputBox.addEventListener("keyup", e => {
     if (e.key === 13 || e.which === 13) {
@@ -83,6 +89,7 @@ in the format dd/mm/yyyy */
     await fetch(url)
         .then(response => response.json())
         .then(deserializedJson => {
+            console.log(deserializedJson)
             const responseObj = deserializedJson;
             City.innerHTML = `City: ${responseObj.name}`;
             Today.innerHTML = `Today: ${new Date(responseObj.dt * 1000).toDateString()}`;
@@ -90,12 +97,13 @@ in the format dd/mm/yyyy */
             Temp.innerHTML = `Temp: ${responseObj.main.temp} °C`;
             Wind.innerHTML = `Wind: ${responseObj.wind.speed} MPH`;
             Humidity.innerHTML = `Humidity: ${responseObj.main.humidity} %`;
+           
             lon = responseObj.coord.lon;
             lat = responseObj.coord.lat;
         })
         .catch(error => console.log(`Ops! Calling API for current day has this error${error}`));
 
-    const forecastUrl = `${oneCallApiEndpoint}?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=metric&appid=${apiKey}`;
+    const forecastUrl = `${oneCallApiEndpoint}?lat=${lat}&lon=${lon}&appid=${apiKey}`;
     const forecastSection = document.getElementsByClassName("forecast")[0];
 
 
@@ -105,11 +113,32 @@ in the format dd/mm/yyyy */
     await fetch(forecastUrl)
         .then(response => response.json())
         .then(deserializedJson => {
+            let uvi = deserializedJson.current.uvi 
+            UVIndex.innerHTML = `UVIndex: ${ uvi }`;
+            if( uvi <= 2 ) {
+                UVIndex.style.backgroundColor = "green"
+            }
+            else if ( uvi < 5 && uvi > 2 ) {
+                UVIndex.style.backgroundColor = "yellow"
+            }
+            else if ( uvi < 7 && uvi > 5 ) {
+                UVIndex.style.backgroundColor = "orange"
+            }
+            else if ( uvi < 10 && uvi > 7 ) {
+                UVIndex.style.backgroundColor = "red"
+            }
+
+            console.log("this is the uvi")
+            
+
+
             const forecastData = deserializedJson.daily.slice(1, 6);
             forecastData.forEach((forecastData, index) => {
                 let futureDayClassname = `future-day-${index}`;
                 let isFutureDaySectionExists = document.getElementsByClassName(futureDayClassname).length !== 0;
                 let dateElement, iconElement, temperatureElement, windElement, humidityElement, futureDaySection;
+
+
 
 /* Typing a city it was showing twice the futuredaysection, so this function replace the original instead to reshow it
 if the function does not exist then the elements need to show up. However if the function exists does not need to show up again 
@@ -132,7 +161,7 @@ but refresh the value */
                     dateElement.innerHTML = new Date(forecastData.dt * 1000).toDateString();
                     iconElement.src = `http://openweathermap.org/img/w/${forecastData.weather[0].icon}.png`;
                     iconElement.alt = "Weather icon";
-                    temperatureElement.innerHTML = `Temp: ${forecastData.temp.day} °C`;
+                    temperatureElement.innerHTML = `Temp: ${Math.round(forecastData.temp.day)/10} °C`;
                     windElement.innerHTML = `Wind: ${forecastData.wind_speed} MPH`;
                     humidityElement.innerHTML = `Humidity: ${forecastData.humidity} %`;
 
@@ -147,7 +176,7 @@ but refresh the value */
                     document.getElementsByClassName(`future-date-${index}`)[0].innerHTML = new Date(forecastData.dt * 1000).toDateString();
                     document.getElementsByClassName(`future-icon-${index}`)[0].src = `http://openweathermap.org/img/w/${forecastData.weather[0].icon}.png`;
                     document.getElementsByClassName(`future-icon-${index}`)[0].alt = "Weather icon";
-                    document.getElementsByClassName(`future-temperature-${index}`)[0].innerHTML = `Temp: ${forecastData.temp.day} °C`;
+                    document.getElementsByClassName(`future-temperature-${index}`)[0].innerHTML = `Temp: ${Math.round(forecastData.temp.day)/10} °C`;
                     document.getElementsByClassName(`future-wind-${index}`)[0].innerHTML = `Wind: ${forecastData.wind_speed} MPH`;
                     document.getElementsByClassName(`future-humidity-${index}`)[0].innerHTML = `Humidity: ${forecastData.humidity} %`;
                 }
